@@ -8,7 +8,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 
 @Table( name = "book")
 @Entity( name = "Book")
-public class Book extends BaseEntity{
+public class Book {
 
     private final static String SEQUENCE_NR_BOOK = "sequence_book_nr";
 
@@ -38,8 +38,14 @@ public class Book extends BaseEntity{
     )
     private Student student;
 
-    public Book(String title, LocalDateTime datePublished) {
-        super(datePublished);
+    @Column( name = "date_created",
+            updatable = false,
+            nullable = false,
+            columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private LocalDateTime dateCreated;
+
+    public Book(String title, LocalDateTime dateCreated) {
+        this.dateCreated = dateCreated;
         this.title = title;
     }
 
@@ -57,8 +63,13 @@ public class Book extends BaseEntity{
     }
 
     public LocalDateTime getDateCreated() {
-        return super.getDateCreated();
+        return this.dateCreated;
     }
+
+    public void setDateCreated(LocalDateTime dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
 
     public String getTitle() {
         return title;

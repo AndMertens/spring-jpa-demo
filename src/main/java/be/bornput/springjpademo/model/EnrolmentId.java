@@ -2,9 +2,10 @@ package be.bornput.springjpademo.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 @Embeddable
-public class EnrolmentId {
+public class EnrolmentId implements Serializable {
 
     @Column ( name = "student_id")
     private Long studentId;

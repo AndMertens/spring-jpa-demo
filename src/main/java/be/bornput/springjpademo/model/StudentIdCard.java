@@ -1,12 +1,6 @@
 package be.bornput.springjpademo.model;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Column;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
@@ -32,13 +26,16 @@ public class StudentIdCard {
              updatable = false )
     private Long id;
 
-    @Column ( name = "student",
-              nullable = false
+    @OneToOne ( cascade = CascadeType.ALL)
+    @JoinColumn( name = "student_id",
+                 referencedColumnName = "id",
+                 foreignKey = @ForeignKey ( name = "student_id_fk")
     )
     private Student student;
 
     @Column ( name = "card_number",
-            nullable = false
+              nullable = false,
+              length = 15
     )
     private String cardNumber;
 
