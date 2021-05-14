@@ -53,6 +53,10 @@ public class StudentIdCard {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Student getStudent() {
         return student;
     }

@@ -2,7 +2,7 @@ package be.bornput.springjpademo.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity( name = "BaseEntity")
 abstract class BaseEntity {
@@ -11,17 +11,17 @@ abstract class BaseEntity {
              updatable = false,
              nullable = false,
              columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    private LocalDate dateCreated;
+    private LocalDateTime dateCreated;
 
-    public LocalDate getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public BaseEntity(LocalDate dateCreated) {
+    public BaseEntity(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 
     public BaseEntity() {
-       // JPA needs empty constructor
+       dateCreated = LocalDateTime.now();
     }
 }

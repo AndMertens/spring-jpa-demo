@@ -59,7 +59,7 @@ public class Student {
                  cascade = { CascadeType.PERSIST, CascadeType.REMOVE },
                  fetch = FetchType.LAZY
     )
-    private List<Book> listOfBooks = new ArrayList<>();
+    private final List<Book> listOfBooks = new ArrayList<>();
 
     @OneToMany ( mappedBy = "student",
                  cascade = { CascadeType.PERSIST, CascadeType.REMOVE }
@@ -98,10 +98,27 @@ public class Student {
         return age;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-    public List<Book> getListOfBooks() {
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public List<Book> getBooks() {
         return listOfBooks;
     }
 
@@ -110,16 +127,29 @@ public class Student {
             listOfBooks.remove(book);
         }
         else {
-            throw new IllegalStateException ("Book" + book.toString() + "was not found");
+            throw new IllegalStateException ("Book " + book.toString() + " was not found");
         }this.listOfBooks.remove(book);
     }
 
-    public void addEnrolment( Book book) {
+    public void addBook( Book book) {
         if(!listOfBooks.contains(book)) {
             listOfBooks.add(book);
         }
         else {
-            throw new IllegalStateException ("Book" + book.toString() + "already exists");
+            throw new IllegalStateException ("Book " + book.toString() + " already exists");
+        }
+    }
+
+    public List<Enrolment> getEnrolments() {
+        return listOfEnrolments;
+    }
+
+    public void addEnrolment( Enrolment enrolment) {
+        if(!listOfEnrolments.contains(enrolment)) {
+            listOfEnrolments.add(enrolment);
+        }
+        else {
+            throw new IllegalStateException ("Enrolment " + enrolment.toString() + " already exists");
         }
     }
 
@@ -157,4 +187,5 @@ public class Student {
         result = 31 * result + age;
         return result;
     }
+
 }

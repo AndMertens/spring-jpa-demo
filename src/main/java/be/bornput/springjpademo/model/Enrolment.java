@@ -105,7 +105,7 @@ public class Enrolment {
                 "id=" + id +
                 ", student=" + student +
                 ", course=" + course +
-                ", dateCreated=" + dateCreated +
+                ", dateCreated=" + dateCreated.toLocalDate() +
                 '}';
     }
 
@@ -119,7 +119,7 @@ public class Enrolment {
         if (!id.equals(enrolment.id)) return false;
         if (!student.equals(enrolment.student)) return false;
         if (!course.equals(enrolment.course)) return false;
-        return Objects.equals(dateCreated, enrolment.dateCreated);
+        return Objects.equals(dateCreated.toLocalDate(), enrolment.dateCreated.toLocalDate());
     }
 
     @Override
@@ -127,7 +127,7 @@ public class Enrolment {
         int result = id.hashCode();
         result = 31 * result + student.hashCode();
         result = 31 * result + course.hashCode();
-        result = 31 * result + (dateCreated != null ? dateCreated.hashCode() : 0);
+        result = 31 * result + (dateCreated != null ? dateCreated.toLocalDate().hashCode() : 0);
         return result;
     }
 }

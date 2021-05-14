@@ -49,7 +49,7 @@ public class Course {
             cascade = { CascadeType.PERSIST, CascadeType.REMOVE },
             mappedBy = "course"
     )
-    private List<Enrolment> enrolments = new ArrayList<>();
+    private final List<Enrolment> enrolments = new ArrayList<>();
 
     public Course() {
         // jpa needs empty contructor
@@ -93,7 +93,7 @@ public class Course {
             enrolments.remove(enrolment);
         }
         else {
-            throw new IllegalStateException ("Enrolment" + enrolment.toString() + "was not found");
+            throw new IllegalStateException ("Enrolment " + enrolment.toString() + " was not found");
         }this.enrolments.remove(enrolment);
     }
 
@@ -102,7 +102,7 @@ public class Course {
             enrolments.add(enrolment);
         }
         else {
-            throw new IllegalStateException ("Enrolment" + enrolment.toString() + "already exists");
+            throw new IllegalStateException ("Enrolment " + enrolment.toString() + " already exists");
         }
     }
 
@@ -124,7 +124,7 @@ public class Course {
 
         if (!id.equals(course.id)) return false;
         if (!title.equals(course.title)) return false;
-        return  (!Objects.equals(department, course.department)) ;
+        return  (Objects.equals(department, course.department)) ;
     }
 
     @Override

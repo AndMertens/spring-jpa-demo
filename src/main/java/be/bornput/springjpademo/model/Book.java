@@ -2,6 +2,8 @@ package be.bornput.springjpademo.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Table( name = "book")
@@ -26,7 +28,7 @@ public class Book extends BaseEntity{
     @Column( name = "book_title",
              nullable = false
     )
-    private String bookTitle;
+    private String title;
 
     @ManyToOne
     @JoinColumn ( name = "student_id",
@@ -36,9 +38,9 @@ public class Book extends BaseEntity{
     )
     private Student student;
 
-    public Book(String bookTitle, LocalDate datePublished) {
+    public Book(String title, LocalDateTime datePublished) {
         super(datePublished);
-        this.bookTitle = bookTitle;
+        this.title = title;
     }
 
     // jpa needs empty contructor
@@ -50,24 +52,28 @@ public class Book extends BaseEntity{
         return id;
     }
 
-    public LocalDate getDateCreated() {
-        return this.getDateCreated();
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getBookTitle() {
-        return bookTitle;
+    public LocalDateTime getDateCreated() {
+        return super.getDateCreated();
     }
 
-    public void setBookTitle(String bookTitle) {
-        this.bookTitle = bookTitle;
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override
     public String toString() {
         return "Book{" +
                 "id=" + id +
-                ", bookTitle='" + bookTitle + '\'' +
-                ", datePublished=" + this.getDateCreated() +
+                ", title='" + title + '\'' +
+                ", datePublished=" + this.getDateCreated().toLocalDate() +
                 '}';
     }
 
@@ -79,15 +85,15 @@ public class Book extends BaseEntity{
         Book book = (Book) o;
 
         if (!id.equals(book.id)) return false;
-        if (!bookTitle.equals(book.bookTitle)) return false;
-        return this.getDateCreated().equals(book.getDateCreated());
+        if (!title.equals(book.title)) return false;
+        return this.getDateCreated().toLocalDate().equals(book.getDateCreated().toLocalDate());
     }
 
     @Override
     public int hashCode() {
         int result = id.hashCode();
-        result = 31 * result + bookTitle.hashCode();
-        result = 31 * result + this.getDateCreated().hashCode();
+        result = 31 * result + title.hashCode();
+        result = 31 * result + this.getDateCreated().toLocalDate().hashCode();
         return result;
     }
 }
