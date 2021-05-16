@@ -1,7 +1,9 @@
 package be.bornput.springjpademo.model;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,6 +23,7 @@ public class Student {
     @Id
     @SequenceGenerator( name = STUDENT_SEQUENCE,
                         sequenceName = STUDENT_SEQUENCE,
+                        initialValue = 1,
                         allocationSize = 1
     )
     @GeneratedValue( strategy = SEQUENCE,
@@ -44,8 +47,8 @@ public class Student {
     private String lastName;
 
     @Column( name = "email",
-            nullable = false ,
-            columnDefinition = "TEXT"
+            nullable = false
+            //columnDefinition = "TEXT"
     )
     private String email;
 
@@ -54,17 +57,27 @@ public class Student {
     )
     private int age;
 
-    @OneToMany ( mappedBy = "student",
-                 orphanRemoval = true,
-                 cascade = { CascadeType.PERSIST, CascadeType.REMOVE },
-                 fetch = FetchType.LAZY
+    @Column( name = "date_created",
+            updatable = false,
+            nullable = false
     )
-    private final List<Book> listOfBooks = new ArrayList<>();
+    private LocalDateTime dateCreated;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "student_book",
+            joinColumns = {
+                    @JoinColumn(name = "student_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "book_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)}
+    )
+    private List<Book> books = new ArrayList<>();
 
     @OneToMany ( mappedBy = "student",
                  cascade = { CascadeType.PERSIST, CascadeType.REMOVE }
     )
-    List<Enrolment> listOfEnrolments = new ArrayList<>();
+    List<Enrolment> enrolments = new ArrayList<>();
 
     public Student(String firstName,
                    String lastName,
@@ -118,22 +131,30 @@ public class Student {
         this.age = age;
     }
 
+    public LocalDateTime getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(LocalDateTime dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
     public List<Book> getBooks() {
-        return listOfBooks;
+        return books;
     }
 
     public void removeBook(Book book) {
-        if(listOfBooks.contains(book)) {
-            listOfBooks.remove(book);
+        if(books.contains(book)) {
+            books.remove(book);
         }
         else {
             throw new IllegalStateException ("Book " + book.toString() + " was not found");
-        }this.listOfBooks.remove(book);
+        }this.books.remove(book);
     }
 
     public void addBook( Book book) {
-        if(!listOfBooks.contains(book)) {
-            listOfBooks.add(book);
+        if(!books.contains(book)) {
+            books.add(book);
         }
         else {
             throw new IllegalStateException ("Book " + book.toString() + " already exists");
@@ -141,12 +162,12 @@ public class Student {
     }
 
     public List<Enrolment> getEnrolments() {
-        return listOfEnrolments;
+        return enrolments;
     }
 
     public void addEnrolment( Enrolment enrolment) {
-        if(!listOfEnrolments.contains(enrolment)) {
-            listOfEnrolments.add(enrolment);
+        if(!enrolments.contains(enrolment)) {
+            enrolments.add(enrolment);
         }
         else {
             throw new IllegalStateException ("Enrolment " + enrolment.toString() + " already exists");

@@ -1,8 +1,13 @@
 package be.bornput.springjpademo.model;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
@@ -10,15 +15,16 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Entity( name = "Book")
 public class Book {
 
-    private final static String SEQUENCE_NR_BOOK = "sequence_book_nr";
+    private final static String BOOK_SEQUENCE = "book_sequence";
 
     @Id
-    @SequenceGenerator( name = SEQUENCE_NR_BOOK,
-                        sequenceName = SEQUENCE_NR_BOOK,
+    @SequenceGenerator( name = BOOK_SEQUENCE,
+                        sequenceName = BOOK_SEQUENCE,
+                        initialValue = 1,
                         allocationSize = 1
     )
     @GeneratedValue( strategy = SEQUENCE,
-                      generator = SEQUENCE_NR_BOOK
+                     generator = BOOK_SEQUENCE
     )
     @Column( name = "id",
              updatable = false
@@ -30,18 +36,13 @@ public class Book {
     )
     private String title;
 
-    @ManyToOne
-    @JoinColumn ( name = "student_id",
-                  nullable = false,
-                  referencedColumnName = "id",
-                  foreignKey =  @ForeignKey(  name = "student_book_fk")
-    )
-    private Student student;
+    @ManyToMany(mappedBy = "books", fetch = FetchType.LAZY)
+    private List<Student> students = new ArrayList<>();
 
     @Column( name = "date_created",
             updatable = false,
-            nullable = false,
-            columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+            nullable = false
+            )
     private LocalDateTime dateCreated;
 
     public Book(String title, LocalDateTime dateCreated) {
@@ -70,13 +71,25 @@ public class Book {
         this.dateCreated = dateCreated;
     }
 
-
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public List<Student> getStudents() {
+        if(!this.students.isEmpty()) {
+            return students;
+        }
+        else {
+            return Collections.emptyList();
+        }
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 
     @Override

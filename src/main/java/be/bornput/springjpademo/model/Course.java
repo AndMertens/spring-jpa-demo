@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Column;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,22 +19,22 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Entity( name = "Course")
 public class Course {
 
-    private static final String SEQUENCE_NR_COURSE = "sequence_nr_course";
+    private static final String COURSE_SEQUENCE = "course_sequence";
 
     @Id
-    @SequenceGenerator( name = SEQUENCE_NR_COURSE,
-                        sequenceName = SEQUENCE_NR_COURSE,
+    @SequenceGenerator( name = COURSE_SEQUENCE,
+                        sequenceName = COURSE_SEQUENCE,
                         allocationSize = 1
     )
-    @GeneratedValue( generator = SEQUENCE_NR_COURSE,
-                     strategy = SEQUENCE
+    @GeneratedValue( strategy = SEQUENCE,
+                     generator = COURSE_SEQUENCE
     )
     @Column( name = "id",
              updatable = false
     )
     private Long id;
 
-    @Column( name = "title",
+    @Column( name = "course_title",
              nullable = false,
              columnDefinition = "TEXT"
     )
@@ -50,6 +51,12 @@ public class Course {
             mappedBy = "course"
     )
     private final List<Enrolment> enrolments = new ArrayList<>();
+
+    @Column( name = "date_created",
+            updatable = false,
+            nullable = false
+    )
+    private LocalDateTime dateCreated;
 
     public Course() {
         // jpa needs empty contructor
@@ -82,6 +89,14 @@ public class Course {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    public LocalDateTime getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(LocalDateTime dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public List<Enrolment> getEnrolments() {
