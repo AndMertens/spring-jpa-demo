@@ -1,19 +1,17 @@
 package be.bornput.springjpademo.controller;
 
-import be.bornput.springjpademo.model.Book;
-import be.bornput.springjpademo.model.Enrolment;
-import be.bornput.springjpademo.model.Student;
-import be.bornput.springjpademo.service.StudentService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import be.bornput.springjpademo.model.Book;
+import be.bornput.springjpademo.model.Enrolment;
+import be.bornput.springjpademo.model.Student;
+import be.bornput.springjpademo.service.StudentService;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -33,15 +31,8 @@ public class StudentController {
     @GetMapping("/student/{id}")
     public Student getStudentById(@PathVariable Long id) {
 
-        Student student = studentService.getStudentById(id).get();
-        if (studentService.getStudentById(id).isPresent()) {
-             return student;
-        }
-        else
-        {
-            Optional<Student> optionalStudent = Optional.of(student);
-            return optionalStudent.get();
-        }
+        return studentService.getStudentById(id).isPresent() ? studentService.getStudentById(id).get() : null;
+       
     }
 
     @GetMapping("/student/{id}/enrolments")

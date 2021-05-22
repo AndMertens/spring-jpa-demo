@@ -1,13 +1,25 @@
 package be.bornput.springjpademo.model;
 
-import javax.persistence.*;
+import static javax.persistence.GenerationType.SEQUENCE;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
-import static javax.persistence.GenerationType.SEQUENCE;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Table(
         name= "student",
@@ -18,7 +30,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Entity(name="Student")
 public class Student {
 
-    private final String STUDENT_SEQUENCE = "student_sequence";
+    private static final String STUDENT_SEQUENCE = "student_sequence";
 
     @Id
     @SequenceGenerator( name = STUDENT_SEQUENCE,

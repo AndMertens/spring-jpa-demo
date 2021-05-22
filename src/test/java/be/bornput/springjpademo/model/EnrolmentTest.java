@@ -1,6 +1,8 @@
 package be.bornput.springjpademo.model;
 
 import be.bornput.springjpademo.UtilHelperClass;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
@@ -15,19 +17,12 @@ class EnrolmentTest {
     private final Course dummyCourse = new Course ("Add 4th course to collection", "Department 4");
     private EnrolmentId dummyEnrolmentId;
     private Enrolment enrolmentUnderTest;
-    private Enrolment dummyEnrolment ;
 
     @BeforeEach
     void setUp(){
         dummyStudent.setId(1L);
         dummyCourse.setId(1L);
         dummyEnrolmentId = new EnrolmentId(dummyStudent.getId(), dummyCourse.getId());
-        dummyEnrolment = new Enrolment(
-                dummyEnrolmentId,
-                dummyStudent,
-                dummyCourse,
-                fixLocalDateNow);
-
     }
 
     @Test
@@ -40,14 +35,16 @@ class EnrolmentTest {
         EnrolmentId enrolmentIdToCompare = new EnrolmentId(studentToCompare.getId(), courseToCompare.getId());
         Enrolment enrolmentToCompareWith = new Enrolment (
                 enrolmentIdToCompare, studentToCompare, courseToCompare, fixLocalDateNow);
-        assertThat(enrolmentUnderTest).isNotNull();
-        assertThat(enrolmentUnderTest.getId()).isEqualTo(dummyEnrolmentId);
-        assertThat(enrolmentUnderTest.getStudent()).isEqualTo(dummyStudent);
-        assertThat(enrolmentUnderTest.getCourse()).isEqualTo(dummyCourse);
-        assertThat(enrolmentUnderTest.getDateCreated().toLocalDate()).isEqualTo(fixLocalDateNow.toLocalDate());
-        assertThat(enrolmentUnderTest).isEqualTo(enrolmentToCompareWith);
-        assertThat(enrolmentUnderTest.toString()).isEqualTo(enrolmentToCompareWith.toString());
-        assertThat(enrolmentUnderTest.hashCode()).isEqualTo(enrolmentToCompareWith.hashCode());
+        Assertions.assertAll( 
+            () -> assertThat(enrolmentUnderTest).isNotNull(),
+            () -> assertThat(enrolmentUnderTest.getId()).isEqualTo(dummyEnrolmentId),
+            () -> assertThat(enrolmentUnderTest.getStudent()).isEqualTo(dummyStudent),
+            () -> assertThat(enrolmentUnderTest.getCourse()).isEqualTo(dummyCourse),
+            () -> assertThat(enrolmentUnderTest.getDateCreated().toLocalDate()).isEqualTo(fixLocalDateNow.toLocalDate()),
+            () -> assertThat(enrolmentUnderTest).isEqualTo(enrolmentToCompareWith),
+            () -> assertThat(enrolmentUnderTest).hasToString(enrolmentToCompareWith.toString()),
+            () -> assertThat(enrolmentUnderTest).hasSameHashCodeAs(enrolmentToCompareWith));
+        
     }
 
     @Test
@@ -57,36 +54,38 @@ class EnrolmentTest {
         enrolmentUnderTest.setCourse(dummyCourse);
         enrolmentUnderTest.setStudent(dummyStudent);
         enrolmentUnderTest.setDateCreated(LocalDateTime.now());
-        assertThat(enrolmentUnderTest).isNotNull();
-        assertThat(enrolmentUnderTest.getCourse().getEnrolments()).isEmpty();
-        assertThat(enrolmentUnderTest.getCourse().getId()).isEqualTo(1L);
-        assertThat(enrolmentUnderTest.getCourse().getTitle()).isEqualTo("Add 4th course to collection");
-        assertThat(enrolmentUnderTest.getCourse().getDepartment()).isEqualTo("Department 4");
-        assertThat(enrolmentUnderTest.getStudent().getEnrolments().isEmpty());
-        assertThat(enrolmentUnderTest.getStudent().getId()).isEqualTo(1L);
-        assertThat(enrolmentUnderTest.getStudent().getFirstName()).isEqualTo("Andy");
-        assertThat(enrolmentUnderTest.getStudent().getLastName()).isEqualTo("Mertens");
-        assertThat(enrolmentUnderTest.getStudent().getEmail()).isEqualTo("andy.mertens@gmail.com");
-        assertThat(enrolmentUnderTest.getStudent().getAge()).isEqualTo(51);
-        assertThat(enrolmentUnderTest.getId().getStudentId()).isEqualTo(1L);
-        assertThat(enrolmentUnderTest.getId().getCourseId()).isEqualTo(1L);
-        assertThat(enrolmentUnderTest.toString()).isEqualTo(
+        Assertions.assertAll (
+            () -> assertThat(enrolmentUnderTest).isNotNull(),
+            () -> assertThat(enrolmentUnderTest.getCourse().getEnrolments()).isEmpty(),
+            () -> assertThat(enrolmentUnderTest.getCourse().getId()).isEqualTo(1L),
+            () -> assertThat(enrolmentUnderTest.getCourse().getTitle()).isEqualTo("Add 4th course to collection"),
+            () -> assertThat(enrolmentUnderTest.getCourse().getDepartment()).isEqualTo("Department 4"),
+            () -> assertThat(enrolmentUnderTest.getStudent().getEnrolments().isEmpty()),
+            () -> assertThat(enrolmentUnderTest.getStudent().getId()).isEqualTo(1L),
+            () -> assertThat(enrolmentUnderTest.getStudent().getFirstName()).isEqualTo("Andy"),
+            () -> assertThat(enrolmentUnderTest.getStudent().getLastName()).isEqualTo("Mertens"),
+            () -> assertThat(enrolmentUnderTest.getStudent().getEmail()).isEqualTo("andy.mertens@gmail.com"),
+            () -> assertThat(enrolmentUnderTest.getStudent().getAge()).isEqualTo(51),
+            () -> assertThat(enrolmentUnderTest.getId().getStudentId()).isEqualTo(1L),
+            () -> assertThat(enrolmentUnderTest.getId().getCourseId()).isEqualTo(1L),
+            () -> assertThat(enrolmentUnderTest).hasToString(
                 "Enrolment{id=EnrolmentId{studentId=1, courseId=1}," +
                 " student=Student{id=1, firstName='Andy', lastName='Mertens', email='andy.mertens@gmail.com', age=51}," +
                 " course=Course{id=1, title='Add 4th course to collection', department='Department 4'}," +
-                " dateCreated=2021-05-14}");
-        assertThat(enrolmentUnderTest.hashCode()).isEqualTo(1951610857);
+                " dateCreated=2021-05-14}"),
+            () -> assertThat(enrolmentUnderTest.hashCode()).isEqualTo(1951610857));
     }
 
     @Test
     public void test_createNewEnrolmentWithConstructorWithoutEnrolmentId() {
         enrolmentUnderTest = new Enrolment ( dummyEnrolmentId, dummyStudent ,dummyCourse, fixLocalDateNow);
-        assertThat(enrolmentUnderTest).isNotNull();
-        assertThat(enrolmentUnderTest.getId()).isEqualTo(dummyEnrolmentId);
-        assertThat(enrolmentUnderTest.getStudent()).isEqualTo(dummyStudent);
-        assertThat(enrolmentUnderTest.getCourse()).isEqualTo(dummyCourse);
-        assertThat(enrolmentUnderTest.getDateCreated().toLocalDate()).isEqualTo(fixLocalDateNow.toLocalDate());
-        assertThat(enrolmentUnderTest.hashCode()).isEqualTo(1951568284);
+        Assertions.assertAll(
+            () -> assertThat(enrolmentUnderTest).isNotNull(),
+            () -> assertThat(enrolmentUnderTest.getId()).isEqualTo(dummyEnrolmentId),
+            () -> assertThat(enrolmentUnderTest.getStudent()).isEqualTo(dummyStudent),
+            () -> assertThat(enrolmentUnderTest.getCourse()).isEqualTo(dummyCourse),
+            () -> assertThat(enrolmentUnderTest.getDateCreated().toLocalDate()).isEqualTo(fixLocalDateNow.toLocalDate()),
+            () -> assertThat(enrolmentUnderTest.hashCode()).isEqualTo(1951568284));
     }
 
 }
