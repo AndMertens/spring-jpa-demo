@@ -1,21 +1,25 @@
 package be.bornput.springjpademo.model;
 
-import javax.persistence.*;
+import static javax.persistence.GenerationType.SEQUENCE;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static javax.persistence.GenerationType.SEQUENCE;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 @Table( name = "book")
 @Entity( name = "Book")
 public class Book {
 
-    private final static String BOOK_SEQUENCE = "book_sequence";
+    private static final String BOOK_SEQUENCE = "book_sequence";
 
     @Id
     @SequenceGenerator( name = BOOK_SEQUENCE,
